@@ -1,0 +1,223 @@
+/* Animations pour les codes hexadécimaux */
+@keyframes hexFall {
+  0% {
+    transform: translateY(-100vh) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes hexGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px #00ff41, 0 0 10px #00ff41, 0 0 15px #00ff41;
+    transform: scale(1);
+  }
+  50% {
+    text-shadow: 0 0 10px #00ff41, 0 0 20px #00ff41, 0 0 30px #00ff41, 0 0 40px #00ff41;
+    transform: scale(1.1);
+  }
+}
+
+/* Animations pour le code React */
+@keyframes reactFloat {
+  0%,
+  100% {
+    transform: translateY(0px) translateX(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-20px) translateX(10px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-10px) translateX(-5px) rotate(-3deg);
+  }
+  75% {
+    transform: translateY(-25px) translateX(8px) rotate(7deg);
+  }
+}
+
+@keyframes reactGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px #61dafb, 0 0 10px #61dafb;
+    opacity: 0.7;
+  }
+  50% {
+    text-shadow: 0 0 10px #61dafb, 0 0 20px #61dafb, 0 0 30px #61dafb;
+    opacity: 1;
+  }
+}
+
+/* Animations pour les étoiles */
+@keyframes starTwinkle {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.5);
+  }
+}
+
+@keyframes starMove {
+  0% {
+    transform: translateX(0px) translateY(0px);
+  }
+  25% {
+    transform: translateX(2px) translateY(-2px);
+  }
+  50% {
+    transform: translateX(-1px) translateY(1px);
+  }
+  75% {
+    transform: translateX(1px) translateY(-1px);
+  }
+  100% {
+    transform: translateX(0px) translateY(0px);
+  }
+}
+
+/* Animations pour les étoiles filantes */
+@keyframes shootingStar {
+  0% {
+    transform: translateX(-100px) translateY(-100px) rotate(45deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) translateY(100vh) rotate(45deg);
+    opacity: 0;
+  }
+}
+
+/* Animations pour le code assembleur */
+@keyframes asmSlide {
+  0% {
+    transform: translateX(-100px) rotate(0deg);
+    opacity: 0;
+  }
+  20% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(100vw) rotate(10deg);
+    opacity: 0;
+  }
+}
+
+@keyframes asmGlow {
+  0%,
+  100% {
+    text-shadow: 0 0 5px #3b82f6, 0 0 10px #3b82f6;
+    color: #3b82f6;
+  }
+  50% {
+    text-shadow: 0 0 10px #60a5fa, 0 0 20px #60a5fa, 0 0 30px #60a5fa;
+    color: #60a5fa;
+  }
+}
+
+/* Animation de pulsation pour les éléments de fond */
+@keyframes backgroundPulse {
+  0%,
+  100% {
+    opacity: 0.1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.3;
+    transform: scale(1.1);
+  }
+}
+
+/* Classes d'animation */
+.hex-code {
+  animation: hexFall 8s linear infinite, hexGlow 2s ease-in-out infinite;
+}
+
+.hex-code:nth-child(1) {
+  animation-delay: 0s, 0s;
+}
+.hex-code:nth-child(2) {
+  animation-delay: 1s, 0.3s;
+}
+.hex-code:nth-child(3) {
+  animation-delay: 2s, 0.6s;
+}
+.hex-code:nth-child(4) {
+  animation-delay: 3s, 0.9s;
+}
+.hex-code:nth-child(5) {
+  animation-delay: 4s, 1.2s;
+}
+.hex-code:nth-child(6) {
+  animation-delay: 5s, 1.5s;
+}
+
+.react-code {
+  animation: reactFloat 6s ease-in-out infinite, reactGlow 3s ease-in-out infinite;
+}
+
+.react-code:nth-child(1) {
+  animation-delay: 0s, 0s;
+}
+.react-code:nth-child(2) {
+  animation-delay: 1s, 0.5s;
+}
+.react-code:nth-child(3) {
+  animation-delay: 2s, 1s;
+}
+.react-code:nth-child(4) {
+  animation-delay: 3s, 1.5s;
+}
+.react-code:nth-child(5) {
+  animation-delay: 4s, 2s;
+}
+
+.star {
+  animation: starTwinkle 3s ease-in-out infinite, starMove 8s ease-in-out infinite;
+}
+
+.shooting-star {
+  animation: shootingStar 4s linear infinite;
+}
+
+.asm-code {
+  animation: asmSlide 10s linear infinite, asmGlow 2.5s ease-in-out infinite;
+}
+
+.asm-code:nth-child(1) {
+  animation-delay: 0s, 0s;
+}
+.asm-code:nth-child(2) {
+  animation-delay: 2s, 0.4s;
+}
+.asm-code:nth-child(3) {
+  animation-delay: 4s, 0.8s;
+}
+.asm-code:nth-child(4) {
+  animation-delay: 6s, 1.2s;
+}
+
+.background-pulse {
+  animation: backgroundPulse 4s ease-in-out infinite;
+}
