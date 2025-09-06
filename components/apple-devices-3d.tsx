@@ -1,35 +1,18 @@
 "use client"
 
 import { Suspense, useState, useEffect } from "react"
-import dynamic from "next/dynamic"
-
-// Chargement dynamique du Canvas pour éviter les problèmes SSR
-const Canvas = dynamic(() => import("@react-three/fiber").then((mod) => ({ default: mod.Canvas })), {
-  ssr: false,
-})
-
-const Float = dynamic(() => import("@react-three/drei").then((mod) => ({ default: mod.Float })), {
-  ssr: false,
-})
-
-const OrbitControls = dynamic(() => import("@react-three/drei").then((mod) => ({ default: mod.OrbitControls })), {
-  ssr: false,
-})
-
-const RoundedBox = dynamic(() => import("@react-three/drei").then((mod) => ({ default: mod.RoundedBox })), {
-  ssr: false,
-})
-
+import { Canvas } from "@react-three/fiber"
+import { Float, OrbitControls, RoundedBox } from "@react-three/drei"
 import { useRef } from "react"
 import { useFrame } from "@react-three/fiber"
 import type * as THREE from "three"
 
-// Fallback simple pour les navigateurs sans WebGL
+// Fallback simple
 function SimpleFallback() {
   return (
     <div className="fixed inset-0 z-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
       <div className="absolute inset-0 opacity-30">
-        {Array.from({ length: 100 }).map((_, i) => (
+        {Array.from({ length: 50 }).map((_, i) => (
           <div
             key={i}
             className="absolute w-1 h-1 bg-white rounded-full animate-pulse"
@@ -45,15 +28,14 @@ function SimpleFallback() {
   )
 }
 
-// Étoiles 3D mobiles
+// Étoiles 3D
 function MovingStars3D() {
   const ref = useRef<THREE.Points>(null)
-  const groupRef = useRef<THREE.Group>(null)
 
-  const positions = new Float32Array(400 * 3) // Réduit pour les performances
-  for (let i = 0; i < 400; i++) {
+  const positions = new Float32Array(200 * 3)
+  for (let i = 0; i < 200; i++) {
     const i3 = i * 3
-    const radius = 30 + Math.random() * 70
+    const radius = 30 + Math.random() * 50
     const theta = Math.random() * Math.PI * 2
     const phi = Math.acos(Math.random() * 2 - 1)
 
@@ -67,40 +49,32 @@ function MovingStars3D() {
       ref.current.rotation.x = state.clock.elapsedTime * 0.0005
       ref.current.rotation.y = state.clock.elapsedTime * 0.001
     }
-
-    if (groupRef.current) {
-      groupRef.current.position.x = Math.sin(state.clock.elapsedTime * 0.1) * 2
-      groupRef.current.position.y = Math.cos(state.clock.elapsedTime * 0.15) * 1.5
-      groupRef.current.rotation.z = state.clock.elapsedTime * 0.02
-    }
   })
 
   return (
-    <group ref={groupRef}>
-      <points ref={ref}>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" count={400} array={positions} itemSize={3} />
-        </bufferGeometry>
-        <pointsMaterial size={1.5} color="#ffffff" transparent opacity={0.8} />
-      </points>
-    </group>
+    <points ref={ref}>
+      <bufferGeometry>
+        <bufferAttribute attach="attributes-position" count={200} array={positions} itemSize={3} />
+      </bufferGeometry>
+      <pointsMaterial size={1.5} color="#ffffff" transparent opacity={0.8} />
+    </points>
   )
 }
 
-// MacBook Pro simplifié
+// MacBook simplifié
 function SimpleMacBook({ position }: { position: [number, number, number] }) {
-  const macbookRef = useRef<THREE.Group>(null)
+  const ref = useRef<THREE.Group>(null)
 
   useFrame((state) => {
-    if (macbookRef.current) {
-      macbookRef.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.2
-      macbookRef.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.3
+    if (ref.current) {
+      ref.current.rotation.y = Math.sin(state.clock.elapsedTime * 0.3) * 0.2
+      ref.current.position.y = position[1] + Math.sin(state.clock.elapsedTime * 0.5) * 0.3
     }
   })
 
   return (
     <Float speed={1.5} rotationIntensity={0.2} floatIntensity={0.4}>
-      <group ref={macbookRef} position={position}>
+      <group ref={ref} position={position}>
         <RoundedBox args={[2.2, 0.08, 1.5]} radius={0.05} smoothness={4}>
           <meshStandardMaterial color="#2d3748" metalness={0.8} roughness={0.2} />
         </RoundedBox>
@@ -121,20 +95,20 @@ function SimpleMacBook({ position }: { position: [number, number, number] }) {
 
 // iPhone simplifié
 function SimpleiPhone({ position }: { position: [number, number, number] }) {
-  const phoneRef = useRef<THREE.Group>(null)
+  const ref = useRef<THREE.Group>(null)
 
   useFrame((state) => {
-    if (phoneRef.current) {
+    if (ref.current) {
       const time = state.clock.elapsedTime
-      phoneRef.current.position.x = position[0] + Math.cos(time * 0.4) * 1.5
-      phoneRef.current.position.z = position[2] + Math.sin(time * 0.4) * 1.5
-      phoneRef.current.rotation.y = time * 0.5
+      ref.current.position.x = position[0] + Math.cos(time * 0.4) * 1.5
+      ref.current.position.z = position[2] + Math.sin(time * 0.4) * 1.5
+      ref.current.rotation.y = time * 0.5
     }
   })
 
   return (
     <Float speed={1.8} rotationIntensity={0.3} floatIntensity={0.5}>
-      <group ref={phoneRef} position={position}>
+      <group ref={ref} position={position}>
         <RoundedBox args={[0.42, 0.85, 0.08]} radius={0.08} smoothness={8}>
           <meshStandardMaterial color="#2d3748" metalness={0.9} roughness={0.1} />
         </RoundedBox>
@@ -149,30 +123,41 @@ function SimpleiPhone({ position }: { position: [number, number, number] }) {
 }
 
 export function AppleDevices3D() {
+  const [mounted, setMounted] = useState(false)
   const [webglSupported, setWebglSupported] = useState(true)
-  const [isClient, setIsClient] = useState(false)
 
   useEffect(() => {
-    setIsClient(true)
+    setMounted(true)
+
+    // Test WebGL support
     try {
       const canvas = document.createElement("canvas")
       const gl = canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
-      if (!gl) setWebglSupported(false)
+      if (!gl) {
+        setWebglSupported(false)
+      }
     } catch (e) {
       setWebglSupported(false)
     }
   }, [])
 
-  if (!isClient || !webglSupported) {
+  if (!mounted || !webglSupported) {
     return <SimpleFallback />
   }
 
   return (
     <Canvas
       camera={{ position: [0, 0, 12], fov: 75 }}
-      dpr={[1, 2]}
+      dpr={[1, 1.5]}
       style={{ background: "transparent" }}
-      gl={{ antialias: true, alpha: true }}
+      gl={{
+        antialias: false,
+        alpha: true,
+        powerPreference: "high-performance",
+      }}
+      onCreated={({ gl }) => {
+        gl.setClearColor(0x000000, 0)
+      }}
     >
       <Suspense fallback={null}>
         <MovingStars3D />

@@ -1,6 +1,5 @@
 "use client"
 
-import dynamic from "next/dynamic"
 import { LanguageSwitcher } from "@/components/language-switcher"
 import { HeroSection } from "@/components/hero-section"
 import { AboutSection } from "@/components/about-section"
@@ -10,23 +9,8 @@ import { Footer } from "@/components/footer"
 import { LanguageProvider } from "@/components/language-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { ThemeToggle } from "@/components/theme-toggle"
-
-// Chargement dynamique des composants 3D pour éviter les problèmes SSR
-const AnimatedCodeBackground = dynamic(
-  () => import("@/components/animated-code-background").then((mod) => ({ default: mod.AnimatedCodeBackground })),
-  {
-    ssr: false,
-    loading: () => <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />,
-  },
-)
-
-const AppleDevices3D = dynamic(
-  () => import("@/components/apple-devices-3d").then((mod) => ({ default: mod.AppleDevices3D })),
-  {
-    ssr: false,
-    loading: () => <div className="fixed inset-0 bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900" />,
-  },
-)
+import { AnimatedCodeBackground } from "@/components/animated-code-background"
+import { AppleDevices3D } from "@/components/apple-devices-3d"
 
 export default function Portfolio() {
   return (

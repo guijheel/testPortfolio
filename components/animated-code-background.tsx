@@ -4,30 +4,19 @@ import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 
 export function AnimatedCodeBackground() {
-  const [isClient, setIsClient] = useState(false)
-  const [windowSize, setWindowSize] = useState({ width: 1920, height: 1080 })
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setIsClient(true)
-    if (typeof window !== "undefined") {
-      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-
-      const handleResize = () => {
-        setWindowSize({ width: window.innerWidth, height: window.innerHeight })
-      }
-
-      window.addEventListener("resize", handleResize)
-      return () => window.removeEventListener("resize", handleResize)
-    }
+    setMounted(true)
   }, [])
 
-  if (!isClient) {
-    return <div className="fixed inset-0 pointer-events-none z-5 overflow-hidden" />
+  if (!mounted) {
+    return null
   }
 
   return (
     <div className="fixed inset-0 pointer-events-none z-5 overflow-hidden">
-      {/* Pluie de code hexadécimal - mouvement diagonal */}
+      {/* Pluie de code hexadécimal */}
       {["0xDEADBEEF", "0xCAFEBABE", "0x1337C0DE", "0xFF00FF", "0xABCDEF", "0x123456"].map((code, i) => (
         <motion.div
           key={`hex-rain-${i}`}
@@ -38,7 +27,7 @@ export function AnimatedCodeBackground() {
           }}
           initial={{ y: -50, x: 0, opacity: 0 }}
           animate={{
-            y: windowSize.height + 50,
+            y: [0, window.innerHeight + 50],
             x: [0, 30, -20, 10, 0],
             opacity: [0, 1, 1, 0.5, 0],
             rotateZ: [0, 10, -5, 15, 0],
@@ -54,7 +43,7 @@ export function AnimatedCodeBackground() {
         </motion.div>
       ))}
 
-      {/* Code assembleur - mouvement en zigzag */}
+      {/* Code assembleur */}
       {["MOV AX, BX", "ADD EAX, EBX", "JMP 0x1000", "CALL FUNC", "PUSH EBP", "POP EAX"].map((code, i) => (
         <motion.div
           key={`asm-float-${i}`}
@@ -81,7 +70,7 @@ export function AnimatedCodeBackground() {
         </motion.div>
       ))}
 
-      {/* Syntaxe web - mouvement orbital */}
+      {/* Syntaxe web */}
       {["const { data }", "useState<T>", "useEffect(() =>", "</> JSX", "async/await", "=> arrow"].map((code, i) => (
         <motion.div
           key={`web-syntax-${i}`}
@@ -108,8 +97,8 @@ export function AnimatedCodeBackground() {
         </motion.div>
       ))}
 
-      {/* Étoiles mobiles - mouvement en spirale */}
-      {Array.from({ length: 30 }).map((_, i) => (
+      {/* Étoiles mobiles */}
+      {Array.from({ length: 20 }).map((_, i) => (
         <motion.div
           key={`moving-star-${i}`}
           className="absolute w-1 h-1 bg-white rounded-full"
