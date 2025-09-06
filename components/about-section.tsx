@@ -4,8 +4,33 @@ import { Code, Smartphone, Palette, Database } from "lucide-react"
 import { useLanguage } from "./language-provider"
 import { GlassCard } from "./glass-card"
 import { ScrollReveal, StaggerContainer, StaggerItem } from "./scroll-animations"
+import { useState, useEffect } from "react"
 
 export function AboutSection() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <section className="py-32 px-6">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16">
+            <h2 className="text-5xl md:text-6xl font-thin mb-8 bg-gradient-to-r from-white to-blue-300 bg-clip-text text-transparent">
+              About Me
+            </h2>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  return <AboutSectionContent />
+}
+
+function AboutSectionContent() {
   const { t } = useLanguage()
 
   const skills = [

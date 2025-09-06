@@ -1,11 +1,32 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, Globe } from "lucide-react"
 import { useLanguage } from "./language-provider"
 
 export function LanguageSwitcher() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Rendu par défaut pendant le chargement
+  if (!mounted) {
+    return (
+      <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white">
+        <Globe className="w-4 h-4" />
+        <span className="font-medium">EN</span>
+        <ChevronDown className="w-4 h-4" />
+      </div>
+    )
+  }
+
+  return <LanguageSwitcherContent />
+}
+
+function LanguageSwitcherContent() {
   const { language, setLanguage } = useLanguage()
   const [isOpen, setIsOpen] = useState(false)
 

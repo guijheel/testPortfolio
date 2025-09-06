@@ -5,8 +5,37 @@ import { ArrowDown } from "lucide-react"
 import { useLanguage } from "./language-provider"
 import { GlassCard } from "./glass-card"
 import { ScrollReveal, ParallaxText } from "./scroll-animations"
+import { useState, useEffect } from "react"
 
 export function HeroSection() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return (
+      <section className="min-h-screen flex items-center justify-center px-6">
+        <div className="max-w-6xl mx-auto text-center">
+          <div className="backdrop-blur-md bg-white/10 border border-white/20 rounded-2xl shadow-2xl p-12 mb-8">
+            <h1 className="text-6xl md:text-8xl font-thin mb-4 bg-gradient-to-r from-white via-blue-300 to-cyan-300 bg-clip-text text-transparent">
+              Full-Stack Developer
+            </h1>
+            <h2 className="text-4xl md:text-6xl font-thin mb-8 text-blue-300">& UI/UX Designer</h2>
+            <p className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed">
+              Crafting digital experiences with cutting-edge technology and innovative design solutions.
+            </p>
+          </div>
+        </div>
+      </section>
+    )
+  }
+
+  return <HeroSectionContent />
+}
+
+function HeroSectionContent() {
   const { t } = useLanguage()
 
   return (
