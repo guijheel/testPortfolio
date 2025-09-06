@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { motion } from "framer-motion"
 
 export function AnimatedCodeBackground() {
   const [isClient, setIsClient] = useState(false)
@@ -13,83 +14,136 @@ export function AnimatedCodeBackground() {
 
   return (
     <div className="fixed inset-0 pointer-events-none z-5 overflow-hidden">
-      {/* Pluie de code hexadécimal */}
-      <div className="absolute inset-0">
-        {["0xDEADBEEF", "0xCAFEBABE", "0x1337C0DE", "0xFF00FF", "0xABCDEF", "0x123456"].map((code, i) => (
-          <div
-            key={`hex-rain-${i}`}
-            className="absolute font-mono text-lg font-bold text-green-400"
-            style={{
-              left: `${10 + i * 12}%`,
-              top: "-50px",
-              textShadow: "0 0 15px #00ff41",
-              animation: `fall-${i} ${8 + i}s linear infinite`,
-            }}
-          >
-            {code}
-          </div>
-        ))}
-      </div>
+      {/* Pluie de code hexadécimal - mouvement diagonal */}
+      {["0xDEADBEEF", "0xCAFEBABE", "0x1337C0DE", "0xFF00FF", "0xABCDEF", "0x123456"].map((code, i) => (
+        <motion.div
+          key={`hex-rain-${i}`}
+          className="absolute font-mono text-lg font-bold text-green-400"
+          style={{
+            left: `${10 + i * 12}%`,
+            textShadow: "0 0 15px #00ff41",
+          }}
+          initial={{ y: -50, x: 0, opacity: 0 }}
+          animate={{
+            y: window.innerHeight + 50,
+            x: [0, 30, -20, 10, 0],
+            opacity: [0, 1, 1, 0.5, 0],
+            rotateZ: [0, 10, -5, 15, 0],
+          }}
+          transition={{
+            duration: 8 + i,
+            delay: i * 1.5,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
+          {code}
+        </motion.div>
+      ))}
 
-      {/* Code assembleur flottant */}
-      <div className="absolute inset-0">
-        {["MOV AX, BX", "ADD EAX, EBX", "JMP 0x1000", "CALL FUNC", "PUSH EBP", "POP EAX"].map((code, i) => (
-          <div
-            key={`asm-float-${i}`}
-            className="absolute font-mono text-base font-bold text-blue-400"
-            style={{
-              left: `${60 + i * 8}%`,
-              top: `${20 + i * 15}%`,
-              textShadow: "0 0 15px #3b82f6",
-              animation: `float-${i} ${6 + i * 0.5}s ease-in-out infinite`,
-            }}
-          >
-            {code}
-          </div>
-        ))}
-      </div>
+      {/* Code assembleur - mouvement en zigzag */}
+      {["MOV AX, BX", "ADD EAX, EBX", "JMP 0x1000", "CALL FUNC", "PUSH EBP", "POP EAX"].map((code, i) => (
+        <motion.div
+          key={`asm-float-${i}`}
+          className="absolute font-mono text-base font-bold text-blue-400"
+          style={{
+            left: `${60 + i * 8}%`,
+            top: `${20 + i * 15}%`,
+            textShadow: "0 0 15px #3b82f6",
+          }}
+          animate={{
+            y: [0, -30, 20, -15, 0],
+            x: [0, 25, -15, 30, 0],
+            opacity: [0.6, 1, 0.8, 1, 0.7],
+            rotateZ: [0, 8, -12, 5, 0],
+            scale: [1, 1.1, 0.9, 1.05, 1],
+          }}
+          transition={{
+            duration: 7 + i * 0.5,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
+          {code}
+        </motion.div>
+      ))}
 
-      {/* Syntaxe web */}
-      <div className="absolute inset-0">
-        {["const { data }", "useState<T>", "useEffect(() =>", "</> JSX", "async/await", "=> arrow"].map((code, i) => (
-          <div
-            key={`web-syntax-${i}`}
-            className="absolute font-mono text-sm font-bold text-purple-400"
-            style={{
-              left: `${5 + i * 15}%`,
-              top: `${50 + i * 10}%`,
-              textShadow: "0 0 15px #8b5cf6",
-              animation: `glow-${i} ${4 + i * 0.3}s ease-in-out infinite`,
-            }}
-          >
-            {code}
-          </div>
-        ))}
-      </div>
+      {/* Syntaxe web - mouvement orbital */}
+      {["const { data }", "useState<T>", "useEffect(() =>", "</> JSX", "async/await", "=> arrow"].map((code, i) => (
+        <motion.div
+          key={`web-syntax-${i}`}
+          className="absolute font-mono text-sm font-bold text-purple-400"
+          style={{
+            left: `${5 + i * 15}%`,
+            top: `${50 + i * 10}%`,
+            textShadow: "0 0 15px #8b5cf6",
+          }}
+          animate={{
+            x: [0, 40, 0, -30, 0],
+            y: [0, -25, 0, 15, 0],
+            scale: [1, 1.2, 0.8, 1.1, 1],
+            opacity: [0.5, 1, 0.7, 1, 0.6],
+            rotateZ: [0, 15, -10, 20, 0],
+          }}
+          transition={{
+            duration: 6 + i * 0.4,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
+          {code}
+        </motion.div>
+      ))}
 
-      {/* Styles CSS pour les animations */}
-      <style jsx>{`
-        @keyframes fall-0 { from { transform: translateY(-50px); } to { transform: translateY(100vh); } }
-        @keyframes fall-1 { from { transform: translateY(-50px); } to { transform: translateY(100vh); } }
-        @keyframes fall-2 { from { transform: translateY(-50px); } to { transform: translateY(100vh); } }
-        @keyframes fall-3 { from { transform: translateY(-50px); } to { transform: translateY(100vh); } }
-        @keyframes fall-4 { from { transform: translateY(-50px); } to { transform: translateY(100vh); } }
-        @keyframes fall-5 { from { transform: translateY(-50px); } to { transform: translateY(100vh); } }
+      {/* Étoiles mobiles - mouvement en spirale */}
+      {Array.from({ length: 60 }).map((_, i) => (
+        <motion.div
+          key={`moving-star-${i}`}
+          className="absolute w-1 h-1 bg-white rounded-full"
+          style={{
+            left: `${Math.random() * 100}%`,
+            top: `${Math.random() * 100}%`,
+          }}
+          animate={{
+            x: [0, 50 * Math.cos(i), 0, -50 * Math.cos(i), 0],
+            y: [0, 50 * Math.sin(i), 0, -50 * Math.sin(i), 0],
+            opacity: [0.3, 1, 0.5, 1, 0.3],
+            scale: [0.5, 2, 1, 1.5, 0.5],
+          }}
+          transition={{
+            duration: 8 + Math.random() * 4,
+            delay: Math.random() * 5,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        />
+      ))}
 
-        @keyframes float-0 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
-        @keyframes float-1 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-15px); } }
-        @keyframes float-2 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-25px); } }
-        @keyframes float-3 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-18px); } }
-        @keyframes float-4 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-22px); } }
-        @keyframes float-5 { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-16px); } }
-
-        @keyframes glow-0 { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
-        @keyframes glow-1 { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } }
-        @keyframes glow-2 { 0%, 100% { opacity: 0.5; transform: scale(1); } 50% { opacity: 1; transform: scale(1.15); } }
-        @keyframes glow-3 { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.08); } }
-        @keyframes glow-4 { 0%, 100% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.12); } }
-        @keyframes glow-5 { 0%, 100% { opacity: 0.7; transform: scale(1); } 50% { opacity: 1; transform: scale(1.06); } }
-      `}</style>
+      {/* Particules de code supplémentaires - mouvement chaotique */}
+      {["#include", "malloc()", "printf()", "return 0;", "void main()"].map((code, i) => (
+        <motion.div
+          key={`extra-code-${i}`}
+          className="absolute font-mono text-xs font-bold text-cyan-400"
+          style={{
+            left: `${20 + i * 20}%`,
+            top: `${80 + i * 5}%`,
+            textShadow: "0 0 10px #06b6d4",
+          }}
+          animate={{
+            x: [0, Math.random() * 100 - 50, Math.random() * 80 - 40, 0],
+            y: [0, Math.random() * 60 - 30, Math.random() * 40 - 20, 0],
+            opacity: [0.4, 1, 0.6, 0.8],
+            rotateZ: [0, Math.random() * 360, Math.random() * -180, 0],
+          }}
+          transition={{
+            duration: 10 + Math.random() * 5,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+        >
+          {code}
+        </motion.div>
+      ))}
     </div>
   )
 }
