@@ -3,16 +3,35 @@
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { ChevronDown, Globe } from "lucide-react"
-import { useLanguage } from "./language-provider"
 
 export function LanguageSwitcher() {
   const [mounted, setMounted] = useState(false)
+  const [language, setLanguage] = useState<"en" | "fr" | "es">("en")
+  const [isOpen, setIsOpen] = useState(false)
 
   useEffect(() => {
     setMounted(true)
+    // Récupérer la langue depuis localStorage
+    const savedLanguage = localStorage.getItem("language") as "en" | "fr" | "es" | null
+    if (savedLanguage) {
+      setLanguage(savedLanguage)
+    }
   }, [])
 
-  // Rendu par défaut pendant le chargement
+  const languages = [
+    { code: "en", name: "EN", flag: "🇺🇸" },
+    { code: "fr", name: "FR", flag: "🇫🇷" },
+    { code: "es", name: "ES", flag: "🇪🇸" },
+  ]
+
+  const currentLang = languages.find((lang) => lang.code === language)
+
+  const handleLanguageChange = (newLanguage: "en" | "fr" | "es") => {
+    setLanguage(newLanguage)
+    localStorage.setItem("language", newLanguage)
+    setIsOpen(false)
+  }
+
   if (!mounted) {
     return (
       <div className="flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white">
@@ -22,21 +41,6 @@ export function LanguageSwitcher() {
       </div>
     )
   }
-
-  return <LanguageSwitcherContent />
-}
-
-function LanguageSwitcherContent() {
-  const { language, setLanguage } = useLanguage()
-  const [isOpen, setIsOpen] = useState(false)
-
-  const languages = [
-    { code: "en", name: "EN", flag: "🇺🇸" },
-    { code: "fr", name: "FR", flag: "🇫🇷" },
-    { code: "es", name: "ES", flag: "🇪🇸" },
-  ]
-
-  const currentLang = languages.find((lang) => lang.code === language)
 
   return (
     <div className="relative">
@@ -65,10 +69,7 @@ function LanguageSwitcherContent() {
             {languages.map((lang) => (
               <motion.button
                 key={lang.code}
-                onClick={() => {
-                  setLanguage(lang.code as any)
-                  setIsOpen(false)
-                }}
+                onClick={() => handleLanguageChange(lang.code as "en" | "fr" | "es")}
                 className="flex items-center gap-3 px-4 py-3 w-full text-left text-white hover:bg-white/20 transition-colors duration-200"
                 whileHover={{ x: 4 }}
               >

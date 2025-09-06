@@ -2,17 +2,43 @@
 
 import { motion } from "framer-motion"
 import { ArrowDown } from "lucide-react"
-import { useLanguage } from "./language-provider"
 import { GlassCard } from "./glass-card"
 import { ScrollReveal, ParallaxText } from "./scroll-animations"
 import { useState, useEffect } from "react"
 
+// Traductions statiques pour éviter les problèmes de contexte
+const translations = {
+  en: {
+    title: "Full-Stack Developer",
+    subtitle: "& UI/UX Designer",
+    description: "Crafting digital experiences with cutting-edge technology and innovative design solutions.",
+  },
+  fr: {
+    title: "Développeur Full-Stack",
+    subtitle: "& Designer UI/UX",
+    description:
+      "Création d'expériences numériques avec des technologies de pointe et des solutions de design innovantes.",
+  },
+  es: {
+    title: "Desarrollador Full-Stack",
+    subtitle: "& Diseñador UI/UX",
+    description: "Creando experiencias digitales con tecnología de vanguardia y soluciones de diseño innovadoras.",
+  },
+}
+
 export function HeroSection() {
   const [mounted, setMounted] = useState(false)
+  const [language, setLanguage] = useState<"en" | "fr" | "es">("en")
 
   useEffect(() => {
     setMounted(true)
+    const savedLanguage = localStorage.getItem("language") as "en" | "fr" | "es" | null
+    if (savedLanguage) {
+      setLanguage(savedLanguage)
+    }
   }, [])
+
+  const t = translations[language]
 
   if (!mounted) {
     return (
@@ -32,12 +58,6 @@ export function HeroSection() {
     )
   }
 
-  return <HeroSectionContent />
-}
-
-function HeroSectionContent() {
-  const { t } = useLanguage()
-
   return (
     <section className="min-h-screen flex items-center justify-center px-6">
       <div className="max-w-6xl mx-auto text-center">
@@ -45,29 +65,29 @@ function HeroSectionContent() {
           <GlassCard className="p-12 mb-8">
             <ParallaxText speed={0.2}>
               <motion.h1
-                className="text-6xl md:text-8xl font-thin mb-4 bg-gradient-to-r from-foreground via-primary to-cyan-300 bg-clip-text text-transparent"
+                className="text-6xl md:text-8xl font-thin mb-4 bg-gradient-to-r from-white via-blue-300 to-cyan-300 bg-clip-text text-transparent"
                 initial={{ opacity: 0, scale: 0.9 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: 1, delay: 0.5 }}
               >
-                {t("hero.title")}
+                {t.title}
               </motion.h1>
             </ParallaxText>
             <motion.h2
-              className="text-4xl md:text-6xl font-thin mb-8 text-primary"
+              className="text-4xl md:text-6xl font-thin mb-8 text-blue-300"
               initial={{ opacity: 0, x: -50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ duration: 0.8, delay: 0.7 }}
             >
-              {t("hero.subtitle")}
+              {t.subtitle}
             </motion.h2>
             <motion.p
-              className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-300 max-w-3xl mx-auto leading-relaxed"
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.9 }}
             >
-              {t("hero.description")}
+              {t.description}
             </motion.p>
           </GlassCard>
         </ScrollReveal>
@@ -76,9 +96,9 @@ function HeroSectionContent() {
           <motion.div
             animate={{ y: [0, 10, 0] }}
             transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-            className="p-4 rounded-full bg-white/10 dark:bg-white/10 backdrop-blur-md border border-white/20"
+            className="p-4 rounded-full bg-white/10 backdrop-blur-md border border-white/20"
           >
-            <ArrowDown className="w-6 h-6 text-primary" />
+            <ArrowDown className="w-6 h-6 text-blue-300" />
           </motion.div>
         </ScrollReveal>
       </div>
