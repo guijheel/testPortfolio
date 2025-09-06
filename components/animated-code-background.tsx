@@ -5,12 +5,25 @@ import { motion } from "framer-motion"
 
 export function AnimatedCodeBackground() {
   const [isClient, setIsClient] = useState(false)
+  const [windowSize, setWindowSize] = useState({ width: 1920, height: 1080 })
 
   useEffect(() => {
     setIsClient(true)
+    if (typeof window !== "undefined") {
+      setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+
+      const handleResize = () => {
+        setWindowSize({ width: window.innerWidth, height: window.innerHeight })
+      }
+
+      window.addEventListener("resize", handleResize)
+      return () => window.removeEventListener("resize", handleResize)
+    }
   }, [])
 
-  if (!isClient) return null
+  if (!isClient) {
+    return <div className="fixed inset-0 pointer-events-none z-5 overflow-hidden" />
+  }
 
   return (
     <div className="fixed inset-0 pointer-events-none z-5 overflow-hidden">
@@ -25,7 +38,7 @@ export function AnimatedCodeBackground() {
           }}
           initial={{ y: -50, x: 0, opacity: 0 }}
           animate={{
-            y: window.innerHeight + 50,
+            y: windowSize.height + 50,
             x: [0, 30, -20, 10, 0],
             opacity: [0, 1, 1, 0.5, 0],
             rotateZ: [0, 10, -5, 15, 0],
@@ -96,7 +109,7 @@ export function AnimatedCodeBackground() {
       ))}
 
       {/* Étoiles mobiles - mouvement en spirale */}
-      {Array.from({ length: 60 }).map((_, i) => (
+      {Array.from({ length: 30 }).map((_, i) => (
         <motion.div
           key={`moving-star-${i}`}
           className="absolute w-1 h-1 bg-white rounded-full"
@@ -117,32 +130,6 @@ export function AnimatedCodeBackground() {
             ease: "easeInOut",
           }}
         />
-      ))}
-
-      {/* Particules de code supplémentaires - mouvement chaotique */}
-      {["#include", "malloc()", "printf()", "return 0;", "void main()"].map((code, i) => (
-        <motion.div
-          key={`extra-code-${i}`}
-          className="absolute font-mono text-xs font-bold text-cyan-400"
-          style={{
-            left: `${20 + i * 20}%`,
-            top: `${80 + i * 5}%`,
-            textShadow: "0 0 10px #06b6d4",
-          }}
-          animate={{
-            x: [0, Math.random() * 100 - 50, Math.random() * 80 - 40, 0],
-            y: [0, Math.random() * 60 - 30, Math.random() * 40 - 20, 0],
-            opacity: [0.4, 1, 0.6, 0.8],
-            rotateZ: [0, Math.random() * 360, Math.random() * -180, 0],
-          }}
-          transition={{
-            duration: 10 + Math.random() * 5,
-            repeat: Number.POSITIVE_INFINITY,
-            ease: "easeInOut",
-          }}
-        >
-          {code}
-        </motion.div>
       ))}
     </div>
   )
